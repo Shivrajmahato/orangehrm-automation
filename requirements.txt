@@ -1,0 +1,6 @@
+robotframework==6.0
+robotframework-seleniumlibrary
+robotframework-requests
+robotframework-jsonlibrary
+python-dotenv
+Flask
