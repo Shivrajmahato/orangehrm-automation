@@ -7,8 +7,10 @@ Library    json
 
 *** Test Cases ***
 Get Auth Token
-    Create Session    hrm    ${API_URL}
-    ${response}=    POST    /token    data={"username": "${USERNAME}", "password": "${PASSWORD}"}    headers={"Content-Type": "application/json"}
+    Create Session    mysession    ${API_URL}
+    POST    mysession    /token    data=${payload}    headers=${headers}
+
+
     ${TOKEN}=    Set Variable    ${response.json()['access_token']}
     Log    Token is: ${TOKEN}
 
