@@ -17,8 +17,8 @@ Login To OrangeHRM
 
 Navigate To Add Employee
     Click Element    xpath=//span[text()="PIM"]
-    Wait Until Element Is Visible    xpath=//*[@id="app"]/div[1]/div[2]/div[2]/div/div[2]/div[1]/button    timeout=10s
-    Click Element xpath=//a[text()='Add Employee']
+    Wait Until Element Is Visible    xpath=//a[text()='Add Employee']    timeout=10s
+    Click Element    xpath=//a[text()='Add Employee']
     
 
 Add Employee
