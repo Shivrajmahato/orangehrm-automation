@@ -36,10 +36,15 @@ Validate Employee In List
     Click Element    xpath=//a[text()="Employee List"]
     Wait Until Element Is Visible    xpath=//input[@placeholder="Type for hints..."]    timeout=20s
     Input Text    xpath=//input[@placeholder="Type for hints..."]    ${FIRST_NAME}
-    Press Keys    xpath=//input[@placeholder="Type for hints..."]    ENTER
+    Press Keys     xpath=//input[@placeholder="Type for hints..."]    ENTER
 
-    #  NEW: Wait for table result to appear
-    Wait Until Element Is Visible    xpath=//div[@role="table"]//div[contains(text(), "${FIRST_NAME}")]    timeout=20s
+    # Wait for results to load
+    Wait Until Element Is Visible    xpath=//div[@role="rowgroup"]    timeout=20s
 
-    #  Optional: Verify name is on screen
+    # Optional: Check for 'No Records Found'
+    ${no_record}=    Run Keyword And Return Status    Page Should Contain Element    xpath=//div[text()="No Records Found"]
+    Run Keyword If    ${no_record}    Fail    Employee not found in list!
+
+    # Wait for and verify name appears
+    Wait Until Page Contains Element    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FIRST_NAME}")]    timeout=20s
     Page Should Contain    ${FIRST_NAME}
