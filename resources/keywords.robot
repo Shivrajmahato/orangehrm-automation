@@ -33,6 +33,6 @@ Add Employee
 
 Validate Employee In List
     Click Element    xpath=//a[text()="Employee List"]
-    Input Text    xpath=//input[@placeholder="Type for hints..."]    ${first_name}
+    Input Text    xpath=//input[@placeholder="Type for hints..."]    ${FIRST_NAME}
     Press Keys    xpath=//input[@placeholder="Type for hints..."]    ENTER
-    Wait Until Page Contains    ${first_name}
+    Wait Until Page Contains    ${FIRST_NAME}
