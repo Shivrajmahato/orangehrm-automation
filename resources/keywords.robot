@@ -13,7 +13,7 @@ Login To OrangeHRM
     Input Text    name=username    ${USERNAME}
     Input Text    name=password    ${PASSWORD}
     Click Button    xpath=//button[@type="submit"]
-    Wait Until Page Contains Element    xpath=//h6[text()="Dashboard"]
+    Wait Until Page Contains Element    xpath=//h6[text()="Dashboard"]    timeout=20s
 
 Navigate To Add Employee
     Click Element    xpath=//span[text()="PIM"]
@@ -27,7 +27,7 @@ Add Employee
     Input Text    xpath=//input[@name='firstName']    ${FIRST_NAME}
     Input Text    xpath=//input[@name='lastName']    ${LAST_NAME}
     Click Button  xpath=//button[@type='submit']
-    
+
     Capture Page Screenshot
 
 Validate Employee In List
