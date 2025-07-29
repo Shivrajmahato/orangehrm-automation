@@ -37,4 +37,9 @@ Validate Employee In List
     Wait Until Element Is Visible    xpath=//input[@placeholder="Type for hints..."]    timeout=20s
     Input Text    xpath=//input[@placeholder="Type for hints..."]    ${FIRST_NAME}
     Press Keys    xpath=//input[@placeholder="Type for hints..."]    ENTER
-    Wait Until Page Contains    ${FIRST_NAME}
+
+    #  NEW: Wait for table result to appear
+    Wait Until Element Is Visible    xpath=//div[@role="table"]//div[contains(text(), "${FIRST_NAME}")]    timeout=20s
+
+    #  Optional: Verify name is on screen
+    Page Should Contain    ${FIRST_NAME}
