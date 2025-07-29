@@ -26,6 +26,7 @@ Add Employee
     Wait Until Element Is Visible    xpath=//input[@name='firstName']    timeout=20s
     Input Text    xpath=//input[@name='firstName']    ${FIRST_NAME}
     Input Text    xpath=//input[@name='lastName']    ${LAST_NAME}
+    Wait Until Element Does Not Exist    xpath=//div[contains(@class,'oxd-form-loader')]    timeout=30s
     Click Button  xpath=//button[@type='submit']
 
     Capture Page Screenshot
