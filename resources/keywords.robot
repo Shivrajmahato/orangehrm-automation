@@ -17,13 +17,13 @@ Login To OrangeHRM
 
 Navigate To Add Employee
     Click Element    xpath=//span[text()="PIM"]
-    Click Element    xpath=//a[text()="Add Employee"]
+    Click Element    xpath=//*[@id="app"]/div[1]/div[2]/div[2]/div/div[2]/div[1]/button
 
 Add Employee
     [Arguments]    ${first_name}    ${last_name}
     Input Text    name=firstName    ${first_name}
     Input Text    name=lastName     ${last_name}
-    Click Button    xpath=//button[@type="submit"]
+    Click Button    xpath=//*[@id="app"]/div[1]/div[2]/div[2]/div/div/form/div[2]/button[2]
     Capture Page Screenshot
 
 Validate Employee In List

@@ -8,5 +8,5 @@ Test Teardown    Close Browser
 Add And Validate New Employee
     Login To OrangeHRM
     Navigate To Add Employee
-    Add Employee    John    Doe
+    Add Employee    Shivaraj    Mahato
     Validate Employee In List

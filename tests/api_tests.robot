@@ -21,7 +21,7 @@ Create User via API
 Validate User Exists And Schema
     ${response}=    GET    /users    headers=${headers}
     ${json}=    Evaluate    ${response.json()}    json
-    Should Contain    ${response.text}    Jane
+    Should Contain    ${response.text}    Shivaraj
     Dictionary Should Contain Key    ${json[0]}    firstName
     Dictionary Should Contain Key    ${json[0]}    lastName
     Dictionary Should Contain Key    ${json[0]}    email
