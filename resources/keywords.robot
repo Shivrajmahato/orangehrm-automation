@@ -32,6 +32,7 @@ Add Employee
     Capture Page Screenshot
 
 Validate Employee In List
+    [Arguments]    ${FIRST_NAME}    ${LAST_NAME}
     Click Element    xpath=//a[text()="Employee List"]
     Input Text    xpath=//input[@placeholder="Type for hints..."]    ${FIRST_NAME}
     Press Keys    xpath=//input[@placeholder="Type for hints..."]    ENTER

@@ -9,4 +9,4 @@ Add And Validate New Employee
     Login To OrangeHRM
     Navigate To Add Employee
     Add Employee    Shivaraj    Mahato
-    Validate Employee In List
+    Validate Employee In List    Shivaraj    Mahato
