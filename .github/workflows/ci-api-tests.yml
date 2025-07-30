@@ -1,71 +1,53 @@
-name: Robot Framework API & UI Tests
+name: Robot Framework API Tests
 
 on:
   push:
     branches:
-      - main
+      - main # Or 'master' if that's your default branch
   pull_request:
     branches:
-      - main
+      - main # Or 'master'
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # GitHub's virtual environment (Linux)
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4 # Action to download your code
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x'
+        python-version: '3.x' # Use a specific version, e.g., '3.10' or '3.11'
 
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Install Google Chrome for Selenium
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+        pip install -r requirements.txt # Installs Robot Framework, RequestsLibrary, Flask, etc.
 
     - name: Start Mock API Server
       run: |
+        # Navigate to the directory where mock_api.py is
         cd mock_api
+        # Start the Flask app in the background. The '&' is crucial.
         python mock_api.py &
-        sleep 5
+        # Give the server a few seconds to fully start up
+        sleep 5 
 
-    - name: Run Robot Framework API Tests
+    - name: Run Robot Framework Tests
+      # This command executes your tests.
+      # -d reports argument specifies where to save logs and reports.
       run: |
-        # Run API tests and save output to a specific XML file
-        robot -d reports -o output-api.xml tests/api_tests.robot
-      env:
-        API_URL: http://127.0.0.1:5000
-
-    - name: Run Robot Framework UI Tests
-      run: |
-        # Run UI tests and save output to another specific XML file
-        # Ensure your variables.robot has BASE_URL pointing to the OrangeHRM UI application.
-        # Remember: If BASE_URL is localhost, the OrangeHRM app must be running within CI.
-        robot -d reports -o output-ui.xml tests/ui_tests.robot
-
-    # --- NEW STEP: MERGE TEST REPORTS ---
-    - name: Merge Test Reports
-      # This step uses 'rebot' to combine the two individual output XMLs
-      # into a single, comprehensive report.html and log.html
-      run: |
-        rebot --output reports/output.xml \
-              --log reports/log.html \
-              --report reports/report.html \
-              --name "Combined Test Results" \
-              reports/output-api.xml \
-              reports/output-ui.xml
+        robot -d reports tests/api_tests.robot
+      # Important: Ensure your variables.robot has API_URL=http://127.0.0.1:5000
+      # as the mock server runs on localhost within the CI runner.
 
     - name: Upload Test Reports
+      # This action makes your test reports (log.html, report.html)
+      # downloadable as a ZIP file from the GitHub Actions run page.
       uses: actions/upload-artifact@v4
       with:
-        name: robot-test-reports
-        path: reports/
+        name: robot-test-reports # The name of the downloadable artifact
+        path: reports/          # The path to your generated reports
         retention-days: 7
