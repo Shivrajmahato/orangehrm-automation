@@ -6,10 +6,12 @@ Resource    ../resources/variables.robot
 *** Test Cases ***
 Get Auth Token
     Create Session    auth    ${API_URL}
+    ${headers}=    Create Dictionary    Content-Type=application/json
     ${response}=    POST On Session    auth    /api/token    json=${auth_payload}    headers=${headers}
     Should Be Equal As Integers    ${response.status_code}    200
-    ${json}=    To json    ${response.content}
+    ${json}=    Set Variable    ${response.json()}
     Set Suite Variable   ${TOKEN}    ${json['access_token']}
+    Log  Auth token: ${TOKEN}
 
 
 Create User via API

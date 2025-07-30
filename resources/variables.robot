@@ -5,5 +5,4 @@ ${BROWSER}      chrome
 ${USERNAME}     Admin
 ${PASSWORD}     admin123
 ${auth_payload}     Create Dictionary    username= Admin  password=admin123
-${headers}      Create Dictionary    Content-Type=application/json
 ${TOKEN}        None
