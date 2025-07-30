@@ -1,0 +1,53 @@
+name: Robot Framework API Tests
+
+on:
+  push:
+    branches:
+      - main # Or 'master' if that's your default branch
+  pull_request:
+    branches:
+      - main # Or 'master'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest # GitHub's virtual environment (Linux)
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4 # Action to download your code
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x' # Use a specific version, e.g., '3.10' or '3.11'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt # Installs Robot Framework, RequestsLibrary, Flask, etc.
+
+    - name: Start Mock API Server
+      run: |
+        # Navigate to the directory where mock_api.py is
+        cd mock_api
+        # Start the Flask app in the background. The '&' is crucial.
+        python mock_api.py &
+        # Give the server a few seconds to fully start up
+        sleep 5 
+
+    - name: Run Robot Framework Tests
+      # This command executes your tests.
+      # -d reports argument specifies where to save logs and reports.
+      run: |
+        robot -d reports tests/api_tests.robot
+      # Important: Ensure your variables.robot has API_URL=http://127.0.0.1:5000
+      # as the mock server runs on localhost within the CI runner.
+
+    - name: Upload Test Reports
+      # This action makes your test reports (log.html, report.html)
+      # downloadable as a ZIP file from the GitHub Actions run page.
+      uses: actions/upload-artifact@v4
+      with:
+        name: robot-test-reports # The name of the downloadable artifact
+        path: reports/          # The path to your generated reports
+        retention-days: 7       # Optional: How long to keep the artifact on GitHub
