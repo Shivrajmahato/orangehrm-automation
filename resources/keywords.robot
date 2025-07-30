@@ -37,16 +37,10 @@ Validate Employee In List
 
     Wait Until Element Is Visible    xpath=//input[@placeholder="Type for hints..."]    timeout=20s
     Input Text    xpath=//input[@placeholder="Type for hints..."]    ${FIRST_NAME} ${LAST_NAME}
-    Sleep    2s    # Let dropdown/filtering kick in
-    Press Keys     xpath=//input[@placeholder="Type for hints..."]    RETURN
-
-    Wait Until Element Is Visible    xpath=//div[@role="rowgroup"]    timeout=20s
-
-    ${no_record}=    Run Keyword And Return Status    Page Should Contain Element    xpath=//div[text()="No Records Found"]
-    Run Keyword If    ${no_record}    Fail    Employee not found in list!
-
-    ${FULL_NAME}=    Set Variable    ${FIRST_NAME} ${LAST_NAME}
-    Wait Until Page Contains Element    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FULL_NAME}")]    timeout=30s
-    Scroll Element Into View    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FULL_NAME}")]
-    Capture Page Screenshot
-    Page Should Contain    ${FULL_NAME}
+Sleep    1s
+Click Element    xpath=//div[@role='listbox']//span[text()='${FIRST_NAME} ${LAST_NAME}']
+Wait Until Page Does Not Contain Element    xpath=//div[@class='oxd-loading-spinner']    timeout=10s
+Wait Until Page Contains Element    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FULL_NAME}")]    timeout=30s
+Scroll Element Into View    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FULL_NAME}")]
+Capture Page Screenshot
+Page Should Contain    ${FULL_NAME}
