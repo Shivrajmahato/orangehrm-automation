@@ -19,6 +19,7 @@ Navigate To Add Employee
     Click Element    xpath=//span[text()="PIM"]
     Wait Until Element Is Visible    xpath=//a[text()='Add Employee']    timeout=20s
     Click Element    xpath=//a[text()='Add Employee']
+    Sleep     5s
     
 
 Add Employee
@@ -27,9 +28,11 @@ Add Employee
     Input Text    xpath=//input[@name='firstName']    ${FIRST_NAME}
     Input Text    xpath=//input[@name='lastName']    ${LAST_NAME}
     Wait Until Page Does Not Contain Element    xpath=//div[contains(@class,'oxd-form-loader')]    timeout=30s
+    Sleep     5s
     Click Button  xpath=//button[@type='submit']
 
     Capture Page Screenshot
+    Sleep     5s
 
 Validate Employee In List
     [Arguments]    ${FIRST_NAME}    ${LAST_NAME}
@@ -43,6 +46,7 @@ Validate Employee In List
     Sleep    5s
     #  Click the green Search button instead of pressing ENTER
     Click Button    xpath=//*[@id="app"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[2]/button[2]
+    Sleep    5s
     
     Wait Until Element Is Visible    xpath=//div[@role="rowgroup"]    timeout=20s
 
