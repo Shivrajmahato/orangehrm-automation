@@ -35,28 +35,20 @@ Validate Employee In List
     [Arguments]    ${FIRST_NAME}    ${LAST_NAME}
     Click Element    xpath=//a[text()="Employee List"]
 
-    # Wait for input to appear
     Wait Until Element Is Visible    xpath=//input[@placeholder="Type for hints..."]    timeout=20s
+    Input Text    xpath=//input[@placeholder="Type for hints..."]    ${FIRST_NAME} ${LAST_NAME}
+    Sleep    2s    # Let dropdown/filtering kick in
+    Press Keys     xpath=//input[@placeholder="Type for hints..."]    RETURN
 
-    # Enter full name
-    ${FULL_NAME}=    Set Variable    ${FIRST_NAME} ${LAST_NAME}
-    Input Text    xpath=//input[@placeholder="Type for hints..."]    ${FULL_NAME}
-    Sleep    1s    # Let auto-complete load if needed
-
-    # ⬇️ CLICK THE SEARCH BUTTON (the green one)
-    Click Button    xpath=//button[contains(., "Search")]
-
-    # Wait for table to appear or update
     Wait Until Element Is Visible    xpath=//div[@role="rowgroup"]    timeout=20s
 
-    # Optional check: No Records Found
     ${no_record}=    Run Keyword And Return Status    Page Should Contain Element    xpath=//div[text()="No Records Found"]
     Run Keyword If    ${no_record}    Fail    Employee not found in list!
 
-    # Wait for expected name to show
+    ${FULL_NAME}=    Set Variable    ${FIRST_NAME} ${LAST_NAME}
     Wait Until Page Contains Element    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FULL_NAME}")]    timeout=30s
-
-    # Scroll and capture
+    sleep    3s
+    click Button   xpath=//*[@id="app"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[2]/button[2]
     Scroll Element Into View    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FULL_NAME}")]
     Capture Page Screenshot
     Page Should Contain    ${FULL_NAME}
