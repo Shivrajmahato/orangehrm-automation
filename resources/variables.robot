@@ -1,9 +1,6 @@
 *** Variables ***
-${BASE_URL}       https://opensource-demo.orangehrmlive.com
-${BROWSER}        chrome
-${USERNAME}       Admin
-${PASSWORD}       admin123
-${API_URL}    http://127.0.0.1:5000
-${auth_payload}    {"username": "admin", "password": "admin123"}
-${TOKEN}          None
-${headers}    Create Dictionary    Content-Type=application/json
+${BASE_URL}        https://reqres.in
+${API_URL}         https://reqres.in/api
+${auth_payload}    {"email": "shivaraj.mahato@reqres.in", "password": "shivaraj123"}
+${TOKEN}           None
+${headers}         Create Dictionary    Content-Type=application/json
