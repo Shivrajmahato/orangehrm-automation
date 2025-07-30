@@ -1,53 +1,73 @@
-name: Robot Framework API Tests
+name: Robot Framework API & UI Tests # Changed name to reflect both types
 
 on:
   push:
     branches:
-      - main # Or 'master' if that's your default branch
+      - main
   pull_request:
     branches:
-      - main # Or 'master'
+      - main
 
 jobs:
   test:
-    runs-on: ubuntu-latest # GitHub's virtual environment (Linux)
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4 # Action to download your code
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # Use a specific version, e.g., '3.10' or '3.11'
+        python-version: '3.x'
 
     - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt # Installs Robot Framework, RequestsLibrary, Flask, etc.
+        pip install -r requirements.txt
 
+    # --- NEW STEPS FOR UI TESTING ---
+    - name: Install Google Chrome for Selenium
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable # Installs Chrome browser
+        # ChromeDriver is usually installed automatically by SeleniumLibrary,
+        # or you might need to use WebDriverManager (if configured in Robot)
+        # or download it explicitly if not. For most cases, this is sufficient.
+
+    # --- EXISTING MOCK API SERVER START (keep this) ---
     - name: Start Mock API Server
       run: |
-        # Navigate to the directory where mock_api.py is
         cd mock_api
-        # Start the Flask app in the background. The '&' is crucial.
         python mock_api.py &
-        # Give the server a few seconds to fully start up
-        sleep 5 
+        sleep 5
 
-    - name: Run Robot Framework Tests
-      # This command executes your tests.
-      # -d reports argument specifies where to save logs and reports.
+    # --- RUN API TESTS (keep this) ---
+    - name: Run Robot Framework API Tests
       run: |
         robot -d reports tests/api_tests.robot
-      # Important: Ensure your variables.robot has API_URL=http://127.0.0.1:5000
-      # as the mock server runs on localhost within the CI runner.
+      env:
+        API_URL: http://127.0.0.1:5000
+
+    # --- NEW STEP TO RUN UI TESTS ---
+    - name: Run Robot Framework UI Tests
+      run: |
+        # IMPORTANT: Your UI tests need access to the OrangeHRM UI application.
+        # If OrangeHRM is a complex app (PHP/MySQL), you'll need to:
+        # 1. Point your UI tests to a *pre-deployed* OrangeHRM instance (e.g., a staging server).
+        #    Make sure your UI_URL in variables.robot points to this.
+        # 2. Or, set up OrangeHRM in a Docker container alongside your tests (more advanced CI setup).
+        #
+        # If your UI is another simple Flask app, you'd start it here like the mock API.
+        # For typical OrangeHRM, it's usually option 1.
+        robot -d reports --merge tests/ui_tests.robot
+        # '--merge' ensures that the output.xml from ui_tests is merged with
+        # the output.xml from api_tests if they were run to the same directory,
+        # creating a single combined report.
 
     - name: Upload Test Reports
-      # This action makes your test reports (log.html, report.html)
-      # downloadable as a ZIP file from the GitHub Actions run page.
       uses: actions/upload-artifact@v4
       with:
-        name: robot-test-reports # The name of the downloadable artifact
-        path: reports/          # The path to your generated reports
-        retention-days: 7       # Optional: How long to keep the artifact on GitHub
+        name: robot-test-reports
+        path: reports/
+        retention-days: 7
