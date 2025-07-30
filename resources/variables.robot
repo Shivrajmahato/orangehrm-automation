@@ -1,10 +1,8 @@
 *** Variables ***
-${BASE_URL}     http://127.0.0.1:5000
-${API_URL}      http://127.0.0.1:5000
-${USERNAME}     Admin
-${PASSWORD}     admin123
-${auth_payload}     {"username": "Admin", "password": "admin123"}
-${headers}      Create Dictionary    Content-Type=application/json
-${TOKEN}        None
+${BASE_URL}       https://reqres.in
+${BROWSER}        chrome
+${API_URL}        https://reqres.in/api
+${TOKEN}          None
+${headers}        {"Content-Type": "application/json"}
 
 
