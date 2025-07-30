@@ -40,9 +40,9 @@ Validate Employee In List
     ${FULL_NAME}=    Set Variable    ${FIRST_NAME} ${LAST_NAME}
     Input Text    xpath=//input[@placeholder="Type for hints..."]    ${FULL_NAME}
 
-    Sleep    1s
+    Sleep    5s
     #  Click the green Search button instead of pressing ENTER
-    Click Button    xpath=//button[.//i[contains(@class, "oxd-icon") and contains(@class, "bi-search")]]
+    Click Button    xpath=//*[@id="app"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[2]/button[2]
     
     Wait Until Element Is Visible    xpath=//div[@role="rowgroup"]    timeout=20s
 
