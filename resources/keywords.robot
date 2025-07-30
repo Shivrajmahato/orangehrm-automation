@@ -46,6 +46,6 @@ Validate Employee In List
     
     Wait Until Element Is Visible    xpath=//div[@role="rowgroup"]    timeout=20s
 
-    #Scroll Element Into View    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FULL_NAME}")]
+    Page Should Contain Element    xpath=//div[@role="rowgroup"]//div[contains(text(), "${FULL_NAME}")]
     Capture Page Screenshot
     Page Should Contain    ${FULL_NAME}
