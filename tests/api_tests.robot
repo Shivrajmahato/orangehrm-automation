@@ -1,4 +1,5 @@
 *** Settings ***
+Variables    ../resources/variables.robot
 Library    RequestsLibrary
 Library    Collections
 
