@@ -1,4 +1,4 @@
-name: Robot Framework API & UI Tests # Changed name to reflect both types
+name: Robot Framework API & UI Tests
 
 on:
   push:
@@ -26,44 +26,42 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # --- NEW STEPS FOR UI TESTING ---
     - name: Install Google Chrome for Selenium
       run: |
         sudo apt-get update
-        sudo apt-get install -y google-chrome-stable # Installs Chrome browser
-        # ChromeDriver is usually installed automatically by SeleniumLibrary,
-        # or you might need to use WebDriverManager (if configured in Robot)
-        # or download it explicitly if not. For most cases, this is sufficient.
+        sudo apt-get install -y google-chrome-stable
 
-    # --- EXISTING MOCK API SERVER START (keep this) ---
     - name: Start Mock API Server
       run: |
         cd mock_api
         python mock_api.py &
         sleep 5
 
-    # --- RUN API TESTS (keep this) ---
     - name: Run Robot Framework API Tests
       run: |
-        robot -d reports tests/api_tests.robot
+        # Run API tests and save output to a specific XML file
+        robot -d reports -o output-api.xml tests/api_tests.robot
       env:
         API_URL: http://127.0.0.1:5000
 
-    # --- NEW STEP TO RUN UI TESTS ---
     - name: Run Robot Framework UI Tests
       run: |
-        # IMPORTANT: Your UI tests need access to the OrangeHRM UI application.
-        # If OrangeHRM is a complex app (PHP/MySQL), you'll need to:
-        # 1. Point your UI tests to a *pre-deployed* OrangeHRM instance (e.g., a staging server).
-        #    Make sure your UI_URL in variables.robot points to this.
-        # 2. Or, set up OrangeHRM in a Docker container alongside your tests (more advanced CI setup).
-        #
-        # If your UI is another simple Flask app, you'd start it here like the mock API.
-        # For typical OrangeHRM, it's usually option 1.
-        robot -d reports --merge tests/ui_tests.robot
-        # '--merge' ensures that the output.xml from ui_tests is merged with
-        # the output.xml from api_tests if they were run to the same directory,
-        # creating a single combined report.
+        # Run UI tests and save output to another specific XML file
+        # Ensure your variables.robot has BASE_URL pointing to the OrangeHRM UI application.
+        # Remember: If BASE_URL is localhost, the OrangeHRM app must be running within CI.
+        robot -d reports -o output-ui.xml tests/ui_tests.robot
+
+    # --- NEW STEP: MERGE TEST REPORTS ---
+    - name: Merge Test Reports
+      # This step uses 'rebot' to combine the two individual output XMLs
+      # into a single, comprehensive report.html and log.html
+      run: |
+        rebot --output reports/output.xml \
+              --log reports/log.html \
+              --report reports/report.html \
+              --name "Combined Test Results" \
+              reports/output-api.xml \
+              reports/output-ui.xml
 
     - name: Upload Test Reports
       uses: actions/upload-artifact@v4
